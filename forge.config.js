@@ -14,11 +14,28 @@ module.exports = {
   ],
   plugins: [
     {
-      name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {},
+      name: '@electron-forge/plugin-vite',
+      config: {
+        // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.
+        build: [
+          {
+            // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
+            entry: 'electron/main.js',
+            config: 'config/vite.main.config.js',
+          },
+          {
+            entry: 'electron/preload.js',
+            config: 'config/vite.preload.config.js',
+          },
+        ],
+        renderer: [
+          {
+            name: 'main_window',
+            config: 'config/vite.renderer.config.js',
+          },
+        ],
+      },
     },
-
-    
     new FusesPlugin({
       version: FuseVersion.V1,
       [FuseV1Options.RunAsNode]: false,
